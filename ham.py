@@ -16,16 +16,6 @@ def remove_punct_stopwords(message):
     words_stop = nltk.corpus.stopwords.words('english')
     form_str_stop = [word for word in form_str_join.split() if word.lower() not in words_stop]
     return form_str_stop
-
-
-spam_model = joblib.load('naive_model.joblib')
-vectorizer = joblib.load('CountVectorizer.joblib')
-inp_text = st.text_area('Paste the email to determine whether it is Spam or Ham',height=200)
-
-vectorised_text = vectorizer.transform([inp_text])
-pred = ''
-# add a placeholder
-
 def spam_predict(inp_text):
     prediction = spam_model.predict(inp_text)
     if prediction == 0:
@@ -33,5 +23,16 @@ def spam_predict(inp_text):
     else:
         pred = 'Spam'
     return pred
+
+spam_model = joblib.load('naive_model.joblib')
+vectorizer = joblib.load('CountVectorizer.joblib')
+inp_text = st.text_area('Paste the email to determine whether it is Spam or Ham',height=200)
+if len(inp_text)>2:
+    inp = remove_punct_stopwords(inp_text)
+    vectorised_text = vectorizer.transform([inp])
+    prd=spam_predict(vectorised_text)
+else:
+    prd="data is not valid..."
+
 if st.button('Submit'):
-    st.write('The email you entered is:',spam_predict(vectorised_text))
+    st.write('The email you entered is:',prd)
