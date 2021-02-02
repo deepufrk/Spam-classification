@@ -13,9 +13,10 @@ punctuation = ["""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""]
 def remove_punct_stopwords(message):
     form_str = [char for char in message if char not in punctuation]
     form_str_join = ''.join(form_str)
+    
     words_stop = nltk.corpus.stopwords.words('english')
     form_str_stop = [word for word in form_str_join.split() if word.lower() not in words_stop]
-    return form_str_stop
+    return ' '.join(form_str_stop)
 
 
 spam_model = joblib.load('naive_model.joblib')
@@ -26,7 +27,7 @@ vectorised_text = vectorizer.transform([txt1])
 pred = ''
 # add a placeholder
 
-def spam_predict():
+def spam_predict(vectorised_text):
     prediction = spam_model.predict(vectorised_text)
     if prediction == 0:
         pred = 'Ham'
