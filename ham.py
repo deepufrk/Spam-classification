@@ -25,14 +25,14 @@ inp_text = st.text_area('Paste the email to determine whether it is Spam or Ham'
 txt1 = remove_punct_stopwords(inp_text)
 vectorised_text = vectorizer.transform([txt1])
 pred = ''
-# add a placeholder
+
 
 def spam_predict(vectorised_text):
     prediction = spam_model.predict(vectorised_text)
     if prediction == 0:
-        pred = 'Ham'
+        pred = 'The Given Text is Ham'
     else:
-        pred = 'Spam'
+        pred = 'The Given Text is Spam'
     return pred
 if st.button('Submit'):
     st.write('The email you entered is:',spam_predict(vectorised_text))
